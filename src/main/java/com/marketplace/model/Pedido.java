@@ -1,8 +1,22 @@
 package com.marketplace.model;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "pedido")
 public class Pedido {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     private String codigo;
     private LocalDateTime dataPedido;
@@ -13,7 +27,11 @@ public class Pedido {
     private double valorTotal;
     private Endereco enderecoEntrega;
     private String codigoRastreio;
+    @Enumerated(EnumType.STRING)
     private StatusPedido status;
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 
     public Pedido(Long id, String codigo, LocalDateTime dataPedido, LocalDateTime dataPagamento,
             LocalDateTime dataEnvio, double valorProdutos, double valorFrete, double valorTotal,

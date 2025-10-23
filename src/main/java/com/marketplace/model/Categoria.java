@@ -1,9 +1,24 @@
 package com.marketplace.model;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "categoria")
 public class Categoria {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     private String nome;
     private String descricao;
+    @OneToMany(mappedBy = "categoria")
+    private List<Produto> produtos;
 
     public Categoria(Long id, String nome, String descricao) {
         this.id = id;
