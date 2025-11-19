@@ -2,13 +2,7 @@ package com.marketplace.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "avaliacao")
@@ -22,6 +16,13 @@ public class Avaliacao {
     @ManyToOne
     @JoinColumn(name="id_produto")
     private Produto produto;
+    @ManyToOne
+    @JoinColumn(name="id_cliente")
+    private Cliente cliente;
+
+    public Avaliacao(){
+
+    }
 
     public Avaliacao(Long id, int nota, String comentario, LocalDateTime dataAvaliacao) {
         this.id = id;

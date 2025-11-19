@@ -1,14 +1,9 @@
 package com.marketplace.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")
@@ -20,11 +15,16 @@ public abstract class Usuario {
     protected String nome;
     protected String email;
     protected String senha;
-    protected Endereco endereco;
+    @OneToMany(mappedBy = "usuario")
+    protected List<Endereco> endereco;
     protected LocalDateTime dataCadastro;
     protected LocalDateTime dataAtualizacao;
 
-    public Usuario(Long id, String nome, String email, String senha, Endereco endereco, LocalDateTime dataCadastro,
+    public Usuario(){
+
+    }
+
+    public Usuario(Long id, String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
             LocalDateTime dataAtualizacao) {
         this.id = id;
         this.nome = nome;

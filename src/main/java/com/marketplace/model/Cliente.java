@@ -12,8 +12,14 @@ public class Cliente extends Usuario {
     private String cpf;
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
+    @OneToMany(mappedBy = "cliente")
+    private List<Avaliacao> avaliacao;
 
-    public Cliente(Long id, String nome, String email, String senha, Endereco endereco, LocalDateTime dataCadastro,
+    public Cliente() {
+        super();
+    }
+
+    public Cliente(Long id, String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
             LocalDateTime dataAtualizacao, String cpf) {
         super(id, nome, email, senha, endereco, dataCadastro, dataAtualizacao);
     }

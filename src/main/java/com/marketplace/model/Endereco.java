@@ -1,6 +1,12 @@
 package com.marketplace.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Endereco {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String cep;
     private String logradouro;
     private String numero;
@@ -8,6 +14,12 @@ public class Endereco {
     private String bairro;
     private String cidade;
     private String estado;
+    @ManyToOne
+    private Usuario usuario;
+
+    public Endereco(){
+
+    }
 
     public Endereco(String cep, String logradouro, String numero, String complemento, String bairro, String cidade,
             String estado) {
