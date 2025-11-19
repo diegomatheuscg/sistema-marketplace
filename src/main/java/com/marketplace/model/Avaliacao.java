@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Avaliacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
     private int nota;
     private String comentario;
     private LocalDateTime dataAvaliacao;
@@ -24,8 +24,7 @@ public class Avaliacao {
 
     }
 
-    public Avaliacao(Long id, int nota, String comentario, LocalDateTime dataAvaliacao) {
-        this.id = id;
+    public Avaliacao(int nota, String comentario, LocalDateTime dataAvaliacao) {
         this.nota = nota;
         this.comentario = comentario;
         this.dataAvaliacao = dataAvaliacao;
@@ -62,5 +61,22 @@ public class Avaliacao {
     public void setDataAvaliacao(LocalDateTime dataAvaliacao) {
         this.dataAvaliacao = dataAvaliacao;
     }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
 
 }

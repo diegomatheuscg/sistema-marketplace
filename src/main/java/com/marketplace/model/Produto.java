@@ -26,6 +26,7 @@ public class Produto {
     private String descricao;
     private int estoque;
     private double peso;
+    private double preco;
     private String urlImagem;
     @ManyToOne
     @JoinColumn(name="id_categoria")
@@ -35,14 +36,18 @@ public class Produto {
     //se eu quero as avaliacoes de produto é muito menos custoso fazer uma query em avaliacao passando o id do produto
     private List<Avaliacao> avaliacoes;
 
-    public Produto(Long id, String sku, String nome, String descricao, int estoque, double peso, String urlImagem) {
-        this.id = id;
+    public Produto(){
+
+    }
+
+    public Produto(String sku, String nome, String descricao, double preco, int estoque, double peso, String urlImagem) {
         this.sku = sku;
         this.nome = nome;
         this.descricao = descricao;
         this.estoque = estoque;
         this.peso = peso;
         this.urlImagem = urlImagem;
+        this.preco = preco;
     }
 
     public Long getId() {
@@ -101,4 +106,23 @@ public class Produto {
         this.urlImagem = urlImagem;
     }
 
+    public Categoria getCategoria() {return categoria;}
+
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
+
+    public List<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(List<Avaliacao> avaliacoes) {
+        this.avaliacoes = avaliacoes;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco){
+        this.preco = preco;
+    }
 }

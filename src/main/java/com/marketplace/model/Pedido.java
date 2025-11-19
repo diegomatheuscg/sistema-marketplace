@@ -3,13 +3,14 @@ package com.marketplace.model;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "pedido")
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
     private String codigo;
     private LocalDateTime dataPedido;
     private LocalDateTime dataPagamento;
@@ -17,7 +18,8 @@ public class Pedido {
     private double valorProdutos;
     private double valorFrete;
     private double valorTotal;
-    @OneToOne(mappedBy = "pedido")
+    @ManyToOne
+    @JoinColumn(name = "id_endereco_entrega")
     private Endereco enderecoEntrega;
     private String codigoRastreio;
     @Enumerated(EnumType.STRING)
@@ -25,11 +27,15 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemPedido> itens;
 
-    public Pedido(Long id, String codigo, LocalDateTime dataPedido, LocalDateTime dataPagamento,
+    public Pedido(){
+
+    }
+    public Pedido(String codigo, LocalDateTime dataPedido, LocalDateTime dataPagamento,
             LocalDateTime dataEnvio, double valorProdutos, double valorFrete, double valorTotal,
-            Endereco enderecoEntrega, String codigoRastreio, StatusPedido status) {
-        this.id = id;
+            Endereco enderecoEntrega, String codigoRastreio, StatusPedido status, Cliente cliente, List<ItemPedido> itens) {
         this.codigo = codigo;
         this.dataPedido = dataPedido;
         this.dataPagamento = dataPagamento;
@@ -40,6 +46,8 @@ public class Pedido {
         this.enderecoEntrega = enderecoEntrega;
         this.codigoRastreio = codigoRastreio;
         this.status = status;
+        this.cliente = cliente;
+        this.itens = itens;
     }
 
     public Long getId() {
@@ -128,6 +136,18 @@ public class Pedido {
 
     public void setStatus(StatusPedido status) {
         this.status = status;
+    }
+
+    public Cliente getCliente() { return cliente; }
+
+    public void setCliente(Cliente cliente) {this.cliente = cliente; }
+
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
     }
 
 }

@@ -11,22 +11,21 @@ import javax.persistence.*;
 public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    protected Long id;
     protected String nome;
     protected String email;
     protected String senha;
-    @OneToMany(mappedBy = "usuario")
-    protected List<Endereco> endereco;
     protected LocalDateTime dataCadastro;
     protected LocalDateTime dataAtualizacao;
+    @OneToMany(mappedBy = "usuario")
+    protected List<Endereco> endereco;
 
     public Usuario(){
 
     }
 
-    public Usuario(Long id, String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
+    public Usuario(String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
             LocalDateTime dataAtualizacao) {
-        this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -67,11 +66,11 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public Endereco getEndereco() {
+    public List<Endereco> getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(Endereco endereco) {
+    public void setEndereco(List<Endereco> endereco) {
         this.endereco = endereco;
     }
 

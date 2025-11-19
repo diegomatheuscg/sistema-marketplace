@@ -1,6 +1,7 @@
 package com.marketplace.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Endereco {
@@ -15,6 +16,7 @@ public class Endereco {
     private String cidade;
     private String estado;
     @ManyToOne
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     public Endereco(){
@@ -86,6 +88,22 @@ public class Endereco {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 }

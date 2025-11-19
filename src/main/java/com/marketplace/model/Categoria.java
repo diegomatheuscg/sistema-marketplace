@@ -14,14 +14,17 @@ import javax.persistence.Table;
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
     private String nome;
     private String descricao;
     @OneToMany(mappedBy = "categoria")
     private List<Produto> produtos;
 
-    public Categoria(Long id, String nome, String descricao) {
-        this.id = id;
+    public Categoria(){
+
+    }
+
+    public Categoria(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
@@ -48,6 +51,14 @@ public class Categoria {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
     }
 
 }

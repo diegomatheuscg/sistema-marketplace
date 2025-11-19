@@ -13,15 +13,17 @@ public class Cliente extends Usuario {
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
     @OneToMany(mappedBy = "cliente")
-    private List<Avaliacao> avaliacao;
+    private List<Avaliacao> avaliacoes;
+
 
     public Cliente() {
         super();
     }
 
-    public Cliente(Long id, String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
+    public Cliente(String nome, String email, String senha, List<Endereco> endereco, LocalDateTime dataCadastro,
             LocalDateTime dataAtualizacao, String cpf) {
-        super(id, nome, email, senha, endereco, dataCadastro, dataAtualizacao);
+        super(nome, email, senha, endereco, dataCadastro, dataAtualizacao);
+        this.cpf = cpf;
     }
 
     public String getCpf() {
@@ -30,6 +32,22 @@ public class Cliente extends Usuario {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public List<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(List<Avaliacao> avaliacoes){
+        this.avaliacoes = avaliacoes;
     }
 
 }
