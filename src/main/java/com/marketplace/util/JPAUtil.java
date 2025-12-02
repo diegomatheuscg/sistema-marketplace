@@ -5,13 +5,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistence");
 
-    public JPAUtil() {
-
-    }
+    // CORREÇÃO: O nome da unidade de persistência foi ajustado para "persistence",
+    // para corresponder ao que está definido no arquivo persistence.xml.
+    private static final EntityManagerFactory FACTORY = Persistence.createEntityManagerFactory("persistence");
 
     public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return FACTORY.createEntityManager();
     }
 }

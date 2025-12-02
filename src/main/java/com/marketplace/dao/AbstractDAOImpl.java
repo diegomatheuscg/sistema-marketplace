@@ -1,29 +1,41 @@
 package com.marketplace.dao;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public abstract class AbstractDAOImpl<T> implements GenericDAO<T> {
-    protected EntityManager entityManager;
-    protected Class<T> entity;
 
-    public AbstractDAOImpl(EntityManager entityManager, Class<T> entity) {
+    // O EntityManager agora é recebido, não mais criado aqui.
+    protected EntityManager entityManager;
+    private final Class<T> aClass;
+
+    public AbstractDAOImpl(EntityManager entityManager, Class<T> aClass) {
         this.entityManager = entityManager;
-        this.entity = entity;
+        this.aClass = aClass;
     }
 
     @Override
-    public void create(T entity){
-        entityManager.getTransaction().begin();
-        entityManager.persist(entity);
-        entityManager.getTransaction().commit();
+    public void create(T entity) {
+        this.entityManager.persist(entity);
     }
 
-    public void update(T entity){
-        entityManager.getTransaction().begin();
-        entityManager.merge(entity);
+    @Override
+    public void update(T entity) {
+        this.entityManager.merge(entity);
     }
 
-    public void delete(T entity){
+    @Override
+    public void delete(T entity) {
+        this.entityManager.remove(this.entityManager.contains(entity) ? entity : this.entityManager.merge(entity));
+    }
 
+    @Override
+    public T findById(Long id) {
+        return this.entityManager.find(aClass, id);
+    }
+
+    @Override
+    public List<T> findAll() {
+        return this.entityManager.createQuery("SELECT e FROM " + aClass.getSimpleName() + " e", aClass).getResultList();
     }
 }
