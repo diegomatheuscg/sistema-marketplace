@@ -11,8 +11,15 @@ public class CategoriaDAO extends AbstractDAOImpl<Categoria> implements GenericD
     }
 
     public List<Categoria> findByName(String nome) {
-        return entityManager.createQuery("SELECT c FROM Categoria c WHERE lower(c.nome) LIKE lower(:nome)", Categoria.class)
+        return em.createQuery("SELECT c FROM Categoria c WHERE lower(c.nome) LIKE lower(:nome)", Categoria.class)
                 .setParameter("nome", "%" + nome + "%")
+                .getResultList();
+    }
+
+
+    public List<Categoria> findCategoriesWithProducts(){
+        String jpql = "SELECT DISTINCT c FROM Categoria c JOIN c.produtos p";
+        return em.createQuery(jpql, Categoria.class)
                 .getResultList();
     }
 }

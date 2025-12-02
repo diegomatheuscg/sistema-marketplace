@@ -5,6 +5,8 @@ import com.marketplace.model.Categoria;
 import com.marketplace.service.CategoriaService;
 import com.marketplace.service.ProdutoService;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -12,7 +14,7 @@ public class Main {
         CategoriaService categoriaService = new CategoriaService();
         ProdutoService produtoService = new ProdutoService();
 
-        Categoria categoria = new Categoria("Eletrônicos", "");
+        Categoria categoria = new Categoria("Cosméticos", "Itens para beleza");
         Produto produto1 = new Produto(
                 "NTC-GMR-01",
                 "Notebook Gamer",
@@ -22,8 +24,12 @@ public class Main {
                 2.5,
                 "http://example.com/notebook.jpg"
         );
+       List<Categoria> lista = categoriaService.buscarCategoriasComProdutos();
 
-        produtoService.cadastrarProduto(produto1, "ADDDD");
+       for(Categoria c : lista){
+           System.out.println(c.getNome() + c.getDescricao());
+       }
+
     }
 
 
