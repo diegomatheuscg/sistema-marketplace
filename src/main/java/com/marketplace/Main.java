@@ -14,7 +14,6 @@ public class Main {
         CategoriaService categoriaService = new CategoriaService();
         ProdutoService produtoService = new ProdutoService();
 
-        Categoria categoria = new Categoria("Cosméticos", "Itens para beleza");
         Produto produto1 = new Produto(
                 "NTC-GMR-01",
                 "Notebook Gamer",
@@ -24,12 +23,11 @@ public class Main {
                 2.5,
                 "http://example.com/notebook.jpg"
         );
-       List<Categoria> lista = categoriaService.buscarCategoriasComProdutos();
 
-       for(Categoria c : lista){
-           System.out.println(c.getNome() + c.getDescricao());
-       }
 
+       Categoria categoria = categoriaService.buscarCategoriaPorId(1L);
+       categoriaService.atualizarCategoria(categoria, "Notebook");
+       System.out.println("Nome da categoria: " + categoriaService.buscarCategoriaPorId(1L).getNome());
     }
 
 
