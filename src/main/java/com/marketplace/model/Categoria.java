@@ -1,5 +1,7 @@
 package com.marketplace.model;
 
+import com.sun.istack.NotNull;
+
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String nome;
     private String descricao;
     @OneToMany(mappedBy = "categoria")

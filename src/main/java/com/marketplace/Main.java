@@ -10,24 +10,23 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-
+        //SERVICES
         CategoriaService categoriaService = new CategoriaService();
         ProdutoService produtoService = new ProdutoService();
-
-        Produto produto1 = new Produto(
-                "NTC-GMR-01",
-                "Notebook Gamer",
-                "Notebook de alta performance para jogos.",
-                5999.99,
-                50,
-                2.5,
-                "http://example.com/notebook.jpg"
-        );
+        //MOCKS
+        Categoria categoria = categoriaService.buscarCategoriaPorId(1L);
+        Produto produto = new Produto.Builder()
+                .sku("NOTE-01")
+                .nome("Acer Aspire 5")
+                .descricao("Processador Intel Core i7 13ª Geração, 16GB de RAM, 15.6' IPS")
+                .categoria(categoria)
+                .build();
 
 
-       Categoria categoria = categoriaService.buscarCategoriaPorId(1L);
-       categoriaService.atualizarCategoria(categoria, "Notebook");
-       System.out.println("Nome da categoria: " + categoriaService.buscarCategoriaPorId(1L).getNome());
+        //TESTES
+        categoriaService.cadastrarCategoria(categoria);
+        produtoService.cadastrarProduto(produto);
+
     }
 
 

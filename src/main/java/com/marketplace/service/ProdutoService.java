@@ -11,24 +11,13 @@ import java.util.List;
 
 public class ProdutoService {
 
-    public void cadastrarProduto(Produto produto, String nomeCategoria) {
+    public void cadastrarProduto(Produto produto) {
         EntityManager em = JPAUtil.getEntityManager();
         ProdutoDAO produtoDAO = new ProdutoDAO(em);
-        CategoriaDAO categoriaDAO = new CategoriaDAO(em);
 
         try {
             em.getTransaction().begin();
-            List<Categoria> categorias = categoriaDAO.findByName(nomeCategoria);
-
-            if (categorias.isEmpty()) {
-                throw new IllegalArgumentException("A categoria " + nomeCategoria + " não existe.");
-            }
-
-            Categoria categoria = categorias.get(0);
-
-            produto.setCategoria(categoria);
             produtoDAO.create(produto);
-
             System.out.println("Cadastro realizado com sucesso!");
             em.getTransaction().commit();
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.marketplace.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Produto")
@@ -22,32 +25,31 @@ public class Produto {
     @Column(length = 10, nullable = false)
     private String sku;
     @Column(nullable = false)
+    @NotBlank(message = "O nome do produto não pode ser vazio.")
     private String nome;
+    @Size(min = 3, max = 500)
     private String descricao;
-    private int estoque;
-    private double peso;
-    private double preco;
+    private BigDecimal preco;
     private String urlImagem;
     @ManyToOne
-    @JoinColumn(name="id_categoria")
+    @JoinColumn(name = "id_categoria")
+    @NotNull(message = "A categoria do produto não pode ser vazia.")
     private Categoria categoria;
-    @OneToMany(mappedBy="produto")//tipos de fetch LAZY E EAGER
-    //só fazer a relação OneToMany quando de fato é necessário pois tem casos que eu busco um objeto e preciso ter quais são os objetos relacionados
-    //se eu quero as avaliacoes de produto é muito menos custoso fazer uma query em avaliacao passando o id do produto
+    @OneToMany(mappedBy = "produto")
     private List<Avaliacao> avaliacoes;
 
-    public Produto(){
-
+    private Produto(Builder builder) {
+        this.sku = builder.sku;
+        this.nome = builder.nome;
+        this.descricao = builder.descricao;
+        this.preco = builder.preco;
+        this.urlImagem = builder.urlImagem;
+        this.categoria = builder.categoria;
+        this.avaliacoes = builder.avaliacoes;
     }
 
-    public Produto(String sku, String nome, String descricao, double preco, int estoque, double peso, String urlImagem) {
-        this.sku = sku;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.estoque = estoque;
-        this.peso = peso;
-        this.urlImagem = urlImagem;
-        this.preco = preco;
+    protected Produto() {
+
     }
 
     public Long getId() {
@@ -82,22 +84,6 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public int getEstoque() {
-        return estoque;
-    }
-
-    public void setEstoque(int estoque) {
-        this.estoque = estoque;
-    }
-
-    public double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(double peso) {
-        this.peso = peso;
-    }
-
     public String getUrlImagem() {
         return urlImagem;
     }
@@ -106,7 +92,7 @@ public class Produto {
         this.urlImagem = urlImagem;
     }
 
-    public Categoria getCategoria() {return categoria;}
+    public Categoria getCategoria() { return categoria;}
 
     public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
@@ -118,11 +104,59 @@ public class Produto {
         this.avaliacoes = avaliacoes;
     }
 
-    public double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco){
-        this.preco = preco;
+    public void setPreco(BigDecimal preco) {this.preco = preco;}
+
+    public static class Builder {
+        private Long id;
+        private String sku;
+        private String nome;
+        private String descricao;
+        private BigDecimal preco;
+        private String urlImagem;
+        private Categoria categoria;
+        private List<Avaliacao> avaliacoes;
+
+        public Builder sku(String sku) {
+            this.sku = sku;
+            return this;
+        }
+
+        public Builder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public Builder descricao(String descricao) {
+            this.descricao = descricao;
+            return this;
+        }
+
+        public Builder preco(BigDecimal preco){
+            this.preco = preco;
+            return this;
+        }
+
+        public Builder urlImagem(String urlImagem){
+            this.urlImagem = urlImagem;
+            return this;
+        }
+
+        public Builder categoria(Categoria categoria){
+            this.categoria = categoria;
+            return this;
+        }
+
+        public Builder avaliacoes(List<Avaliacao> avaliacoes){
+            this.avaliacoes = avaliacoes;
+            return this;
+        }
+
+        public Produto build(){
+            return new Produto(this);
+        }
     }
 }
