@@ -1,6 +1,7 @@
 package com.marketplace.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -8,10 +9,14 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message="O CEP está vazio.")
     private String cep;
+    @NotNull(message="O logradouro está vazio.")
     private String logradouro;
+    @NotNull(message="O número está vazio.")
     private String numero;
     private String complemento;
+    @NotNull(message="O bairro está vazio.")
     private String bairro;
     private String cidade;
     private String estado;
@@ -23,8 +28,7 @@ public class Endereco {
 
     }
 
-    public Endereco(String cep, String logradouro, String numero, String complemento, String bairro, String cidade,
-            String estado) {
+    private Endereco(Builder builder) {
         this.cep = cep;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -106,4 +110,53 @@ public class Endereco {
         this.usuario = usuario;
     }
 
+    private static class Builder{
+        private Long id;
+        private String cep;
+        private String logradouro;
+        private String numero;
+        private String complemento;
+        private String bairro;
+        private String cidade;
+        private String estado;
+
+        public Builder cep(String cep){
+            this.cep = cep;
+            return this;
+        }
+
+        public Builder logradouro(String logradouro){
+            this.logradouro = logradouro;
+            return this;
+        }
+
+        public Builder numero(String numero){
+            this.numero = numero;
+            return this;
+        }
+
+        public Builder complemento(String complemento){
+            this.complemento = complemento;
+            return this;
+        }
+
+        public Builder bairro(String bairro){
+            this.bairro = bairro;
+            return this;
+        }
+
+        public Builder cidade(String cidade){
+            this.cidade = cidade;
+            return this;
+        }
+
+        public Builder estado(String estado){
+            this.estado = estado;
+            return this;
+        }
+
+        public Endereco build(){
+            return new Endereco(this);
+        }
+    }
 }
