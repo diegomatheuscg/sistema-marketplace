@@ -110,7 +110,7 @@ public class Endereco {
         this.usuario = usuario;
     }
 
-    private static class Builder{
+    public static class Builder{
         private Long id;
         private String cep;
         private String logradouro;

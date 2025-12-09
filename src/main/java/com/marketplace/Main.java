@@ -1,37 +1,26 @@
 package com.marketplace;
 
-import com.marketplace.model.Pedido;
-import com.marketplace.model.Produto;
-import com.marketplace.model.Categoria;
-import com.marketplace.service.CategoriaService;
-import com.marketplace.service.ProdutoService;
+import com.marketplace.model.*;
+import com.marketplace.dto.*;
+import com.marketplace.service.*;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("--- INICIANDO E-COMMERCE ---");
 
-        //SERVICES
+        // 1. services
         CategoriaService categoriaService = new CategoriaService();
         ProdutoService produtoService = new ProdutoService();
-        //MOCKS
-        Categoria categoria = categoriaService.buscarCategoriaPorId(1L);
-        Produto produto = new Produto.Builder()
-                .sku("NOTE-01")
-                .nome("Acer Aspire 5")
-                .descricao("Processador Intel Core i7 13ª Geração, 16GB de RAM, 15.6' IPS")
-                .categoria(categoria)
-                .build();
+        ClienteService clienteService = new ClienteService();
+        EnderecoService enderecoService = new EnderecoService();
+        PedidoService pedidoService = new PedidoService();
+        AvaliacaoService avaliacaoService = new AvaliacaoService();
 
+        Pedido pedido = pedidoService.buscarPedidoCompleto(1L);
 
-        //TESTES
-        Pedido pedido = new Pedido.Builder()
-                .enderecoEntrega();
-
-        categoriaService.cadastrarCategoria(categoria);
-        produtoService.cadastrarProduto(produto);
-
+        System.out.println(pedido.getCliente().getNome()+"\n"+pedido.getCliente().getEmail());
     }
-
-
 }
