@@ -12,6 +12,9 @@ public class PedidoDAO extends AbstractDAOImpl<Pedido> implements GenericDAO<Ped
         super(em, Pedido.class);
     }
 
+    public Pedido buscarPedidoComItens(Long id){
+
+    }
     public List<Pedido> listarPorCliente(Long id){
         String jpql = "SELECT p FROM Pedido p WHERE p.cliente.id = :id ORDER BY p.dataPedido DESC";
         return em.createQuery(jpql, Pedido.class).

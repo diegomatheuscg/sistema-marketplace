@@ -1,5 +1,6 @@
 package com.marketplace;
 
+import com.marketplace.model.Pedido;
 import com.marketplace.model.Produto;
 import com.marketplace.model.Categoria;
 import com.marketplace.service.CategoriaService;
@@ -24,6 +25,9 @@ public class Main {
 
 
         //TESTES
+        Pedido pedido = new Pedido.Builder()
+                .enderecoEntrega();
+
         categoriaService.cadastrarCategoria(categoria);
         produtoService.cadastrarProduto(produto);
 
