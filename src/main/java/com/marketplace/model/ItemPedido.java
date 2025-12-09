@@ -1,14 +1,7 @@
 package com.marketplace.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "item_pedido")
@@ -18,11 +11,11 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pedido", nullable = false)
     private Pedido pedido;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_produto", nullable = false)
     private Produto produto;
 
@@ -30,10 +23,20 @@ public class ItemPedido {
     private int quantidade;
 
     @Column(name = "preco_unitario", nullable = false)
-    private double precoUnitario;
+    private BigDecimal precoUnitario;
 
     public ItemPedido() {
+    }
 
+    public ItemPedido(Produto produto, int quantidade) {
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.precoUnitario = produto.getPreco();
+    }
+
+    @Transient
+    public BigDecimal getValorTotal() {
+        return this.precoUnitario.multiply(new BigDecimal(this.quantidade));
     }
 
     public Long getId() {
@@ -68,16 +71,11 @@ public class ItemPedido {
         this.quantidade = quantidade;
     }
 
-    public double getPrecoUnitario() {
+    public BigDecimal getPrecoUnitario() {
         return precoUnitario;
     }
 
-    public void setPrecoUnitario(double precoUnitario) {
+    public void setPrecoUnitario(BigDecimal precoUnitario) {
         this.precoUnitario = precoUnitario;
-    }
-
-    @Transient
-    public double getValorTotal() {
-        return this.precoUnitario * this.quantidade;
     }
 }

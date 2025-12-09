@@ -20,8 +20,8 @@ public record ClienteDTO(
                 cliente.getCpf(),
                 cliente.getDataCadastro(),
                 // Verifica se a lista não é nula antes de converter para evitar NullPointerException
-                cliente.getEndereco() != null
-                        ? cliente.getEndereco().stream().map(EnderecoDTO::new).toList()
+                cliente.getEnderecos() != null
+                        ? cliente.getEnderecos().stream().map(EnderecoDTO::new).toList()
                         : List.of()
         );
     }
