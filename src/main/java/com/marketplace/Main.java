@@ -6,6 +6,7 @@ import com.marketplace.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,8 +20,22 @@ public class Main {
         PedidoService pedidoService = new PedidoService();
         AvaliacaoService avaliacaoService = new AvaliacaoService();
 
-        Pedido pedido = pedidoService.buscarPedidoCompleto(1L);
+        Cliente cliente = new Cliente.Builder()
+                .nome("Diego Matheus de Carvalho Gonçalves")
+                .cpf("099.992.159-20")
+                .email("diegogon699@gmail.com")
+                .senha("six944565").build();
+        clienteService.cadastrarCliente(cliente);
 
-        System.out.println(pedido.getCliente().getNome()+"\n"+pedido.getCliente().getEmail());
+        Endereco endereco1 = new Endereco.Builder()
+                .cep("87704-200")
+                .bairro("Jardim Ouro Branco")
+                .complemento("Próximo ao mercado Amigão")
+                .logradouro("Rua Lapa")
+                .numero("1374")
+                .usuario(cliente).build();
+
+        enderecoService.cadastrarEndereco(endereco1);
+
     }
 }

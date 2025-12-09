@@ -9,15 +9,20 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull(message="O CEP está vazio.")
     private String cep;
+
     @NotNull(message="O logradouro está vazio.")
     private String logradouro;
+
     @NotNull(message="O número está vazio.")
     private String numero;
     private String complemento;
+
     @NotNull(message="O bairro está vazio.")
     private String bairro;
+
     private String cidade;
     private String estado;
     @ManyToOne
@@ -29,13 +34,14 @@ public class Endereco {
     }
 
     private Endereco(Builder builder) {
-        this.cep = cep;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
+        this.cep = builder.cep;
+        this.logradouro = builder.logradouro;
+        this.numero = builder.numero;
+        this.complemento = builder.complemento;
+        this.bairro = builder.bairro;
+        this.cidade = builder.cidade;
+        this.estado = builder.estado;
+        this.usuario = builder.usuario;
     }
 
     public String getCep() {
@@ -110,6 +116,9 @@ public class Endereco {
         this.usuario = usuario;
     }
 
+    public static Builder builder(){
+        return new Builder();
+    }
     public static class Builder{
         private Long id;
         private String cep;
@@ -119,6 +128,7 @@ public class Endereco {
         private String bairro;
         private String cidade;
         private String estado;
+        private Usuario usuario;
 
         public Builder cep(String cep){
             this.cep = cep;
@@ -155,8 +165,23 @@ public class Endereco {
             return this;
         }
 
+        public Builder usuario(Usuario usuario){
+            this.usuario = usuario;
+            return this;
+        }
+
         public Endereco build(){
             return new Endereco(this);
         }
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(logradouro+"\n")
+                .append(bairro+"\n")
+                .append(cidade+" - "+estado+"\n")
+                .append(cep);
+
+        return sb.toString();
     }
 }
