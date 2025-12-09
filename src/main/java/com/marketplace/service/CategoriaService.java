@@ -5,11 +5,9 @@ import com.marketplace.model.Categoria;
 import com.marketplace.util.JPAUtil;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaService {
-    private CategoriaDAO categoriaDAO;
 
     public void cadastrarCategoria(Categoria categoria) {
         EntityManager em = JPAUtil.getEntityManager();
@@ -17,45 +15,63 @@ public class CategoriaService {
 
         try {
             em.getTransaction().begin();
-            List<Categoria> categoriasEncontradas = categoriaDAO.findByName(categoria.getNome());
-            if(categoria.getNome() == null || categoria.getNome() == ""){
-                throw new IllegalArgumentException("O nome da categoria não pode ser nulo.");
-            }else if (!categoriasEncontradas.isEmpty()) {
-                throw new IllegalArgumentException("Essa categoria já existe!");
+
+            if (categoria.getNome() == null || categoria.getNome().trim().isEmpty()) {
+                throw new IllegalArgumentException("O nome da categoria não pode ser vazio.");
             }
+
+            if (categoriaDAO.existePorNome(categoria.getNome())) {
+                throw new IllegalArgumentException("Já existe uma categoria com este nome: " + categoria.getNome());
+            }
+
             categoriaDAO.create(categoria);
+
             em.getTransaction().commit();
-            System.out.println("Categoria cadastrada com sucesso!");
+            System.out.println("Categoria cadastrada com sucesso: " + categoria.getNome());
+
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao cadastrar categoria: " + e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public void atualizarCategoria(Categoria categoria, String nome) {
+    public void atualizarCategoria(Long id, String novoNome) {
         EntityManager em = JPAUtil.getEntityManager();
         CategoriaDAO categoriaDAO = new CategoriaDAO(em);
+
         try {
             em.getTransaction().begin();
-            if(categoria == null){
-                throw new IllegalArgumentException("A categoria não existe.");
-            }else if (nome == null || nome == ""){
-                throw new IllegalArgumentException("O nome não pode ser nulo.");
+
+            Categoria categoria = categoriaDAO.findById(id);
+
+            if (categoria == null) {
+                throw new IllegalArgumentException("Categoria não encontrada.");
             }
-            categoria.setNome(nome);
+
+            if (novoNome == null || novoNome.trim().isEmpty()) {
+                throw new IllegalArgumentException("O novo nome não pode ser vazio.");
+            }
+
+            if (!categoria.getNome().equalsIgnoreCase(novoNome) && categoriaDAO.existePorNome(novoNome)) {
+                throw new IllegalArgumentException("Já existe outra categoria com o nome: " + novoNome);
+            }
+
+            categoria.setNome(novoNome);
             categoriaDAO.update(categoria);
+
             em.getTransaction().commit();
             System.out.println("Categoria atualizada com sucesso!");
-        }catch (Exception e){
-            if(em.getTransaction().isActive()){
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new RuntimeException(e);
-        }finally {
+            throw new RuntimeException("Erro ao atualizar categoria: " + e.getMessage());
+        } finally {
             em.close();
         }
     }
@@ -64,59 +80,60 @@ public class CategoriaService {
         EntityManager em = JPAUtil.getEntityManager();
         CategoriaDAO categoriaDAO = new CategoriaDAO(em);
 
-
-        try{
+        try {
             em.getTransaction().begin();
-            Categoria categoria = categoriaDAO.findById(id);
-            if(categoria == null){
-                throw new IllegalArgumentException("A categoria não existe.");
-            }else if(categoria.getProdutos()!=null && !categoria.getProdutos().isEmpty()){
-                throw new IllegalArgumentException("A categoria possui produtos e não pode ser deletada.");
+
+            Categoria categoria = categoriaDAO.buscarPorIdComProdutos(id);
+
+            if (categoria == null) {
+                categoria = categoriaDAO.findById(id);
+                if (categoria == null) throw new IllegalArgumentException("Categoria não encontrada.");
             }
+
+            if (categoria.getProdutos() != null && !categoria.getProdutos().isEmpty()) {
+                throw new IllegalArgumentException("Não é possível deletar a categoria '" + categoria.getNome() +
+                        "' pois ela possui " + categoria.getProdutos().size() + " produtos vinculados.");
+            }
+
             categoriaDAO.delete(categoria);
+
             em.getTransaction().commit();
-            System.out.println("Categoria deletada com sucesso!");
-        }catch(Exception e){
-            if(em.getTransaction().isActive()){
+            System.out.println("Categoria removida com sucesso.");
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            e.printStackTrace();
-        }finally{
+            throw new RuntimeException("Erro ao deletar categoria: " + e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Categoria> listarTodas() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return new CategoriaDAO(em).findAll();
+        } finally {
             em.close();
         }
     }
 
     public List<Categoria> buscarCategoriasComProdutos() {
         EntityManager em = JPAUtil.getEntityManager();
-        CategoriaDAO categoriaDAO = new CategoriaDAO(em);
-        List<Categoria> categorias;
         try {
-            categorias = categoriaDAO.findCategoriesWithProducts();
-            if (categorias.isEmpty()) {
-                System.out.println("Não foram encontradas categorias com produtos.");
-                return null;
-            }
+            return new CategoriaDAO(em).findCategoriesWithProducts();
         } finally {
             em.close();
         }
-        return categorias;
     }
 
-    public Categoria buscarCategoriaPorId(Long id){
+    public Categoria buscarPorId(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
-        CategoriaDAO categoriaDAO = new CategoriaDAO(em);
-        Categoria categoria;
         try {
-            categoria = categoriaDAO.findById(id);
-            if (categoria != null) {
-                System.out.println("Categoria encontrada: " + categoria.getNome());
-            } else {
-                System.out.println("Categoria não encontrada.");
-                return null;
-            }
-        }finally{
+            return new CategoriaDAO(em).findById(id);
+        } finally {
             em.close();
         }
-         return categoria;
     }
 }
