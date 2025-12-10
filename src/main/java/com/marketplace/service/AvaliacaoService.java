@@ -2,6 +2,7 @@ package com.marketplace.service;
 
 import com.marketplace.dao.AvaliacaoDAO;
 import com.marketplace.dao.PedidoDAO;
+import com.marketplace.dto.AvaliacaoDTO;
 import com.marketplace.model.Avaliacao;
 import com.marketplace.util.JPAUtil;
 
@@ -54,10 +55,13 @@ public class AvaliacaoService {
         }
     }
 
-    public List<Avaliacao> listarAvaliacoesDoProduto(Long idProduto) {
+    public List<AvaliacaoDTO> listarAvaliacoesDoProduto(Long idProduto) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new AvaliacaoDAO(em).buscarPorProduto(idProduto);
+            return new AvaliacaoDAO(em).buscarPorProduto(idProduto)
+                    .stream()
+                    .map(AvaliacaoDTO::new)
+                    .toList();
         } finally {
             em.close();
         }

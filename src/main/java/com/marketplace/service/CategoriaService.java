@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.dao.CategoriaDAO;
+import com.marketplace.dto.CategoriaDTO;
 import com.marketplace.model.Categoria;
 import com.marketplace.util.JPAUtil;
 
@@ -110,28 +111,38 @@ public class CategoriaService {
         }
     }
 
-    public List<Categoria> listarTodas() {
+    public List<CategoriaDTO> listarTodas() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new CategoriaDAO(em).findAll();
+            return new CategoriaDAO(em).findAll()
+                    .stream()
+                    .map(CategoriaDTO::new)
+                    .toList();
         } finally {
             em.close();
         }
     }
 
-    public List<Categoria> buscarCategoriasComProdutos() {
+    public List<CategoriaDTO> buscarCategoriasComProdutos() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new CategoriaDAO(em).findCategoriesWithProducts();
+
+            return new CategoriaDAO(em).findCategoriesWithProducts()
+                    .stream()
+                    .map(CategoriaDTO::new)
+                    .toList();
         } finally {
             em.close();
         }
     }
 
-    public Categoria buscarPorId(Long id) {
+    public CategoriaDTO buscarPorId(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new CategoriaDAO(em).findById(id);
+            Categoria categoria = new CategoriaDAO(em).findById(id);
+            if (categoria == null) return null;
+
+            return new CategoriaDTO(categoria);
         } finally {
             em.close();
         }

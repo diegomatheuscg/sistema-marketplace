@@ -3,6 +3,7 @@ package com.marketplace.service;
 import com.marketplace.dao.PedidoDAO;
 import com.marketplace.dao.ProdutoDAO;
 import com.marketplace.dao.ClienteDAO;
+import com.marketplace.dto.PedidoDTO;
 import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pedido;
 import com.marketplace.model.Produto;
@@ -134,20 +135,25 @@ public class PedidoService {
         }
     }
 
-    public List<Pedido> listarPedidosDoCliente(Long idCliente) {
+    public List<PedidoDTO> listarPedidosDoCliente(Long idCliente) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new PedidoDAO(em).listarPorCliente(idCliente);
+            return new PedidoDAO(em).listarPorCliente(idCliente)
+                    .stream()
+                    .map(PedidoDTO::new) // O DTO já trata a lista de itens e o endereço
+                    .toList();
         } finally {
             em.close();
         }
     }
 
-    public Pedido buscarPedidoCompleto(Long id) {
+    public PedidoDTO buscarPedidoCompleto(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
-        PedidoDAO dao = new PedidoDAO(em);
         try {
-            return dao.buscarPedidoComItens(id);
+            Pedido pedido = new PedidoDAO(em).buscarPedidoComItens(id);
+            if (pedido == null) return null;
+
+            return new PedidoDTO(pedido);
         } finally {
             em.close();
         }

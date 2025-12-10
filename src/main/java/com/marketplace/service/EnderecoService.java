@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.dao.EnderecoDAO;
+import com.marketplace.dto.EnderecoDTO;
 import com.marketplace.model.Endereco;
 import com.marketplace.util.JPAUtil;
 
@@ -39,10 +40,13 @@ public class EnderecoService {
         }
     }
 
-    public List<Endereco> listarEnderecosDoUsuario(Long idUsuario) {
+    public List<EnderecoDTO> listarEnderecosDoUsuario(Long idUsuario) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new EnderecoDAO(em).buscarPorUsuario(idUsuario);
+            return new EnderecoDAO(em).buscarPorUsuario(idUsuario)
+                    .stream()
+                    .map(EnderecoDTO::new)
+                    .toList();
         } finally {
             em.close();
         }
@@ -74,10 +78,13 @@ public class EnderecoService {
         }
     }
 
-    public List<Endereco> buscarPorEstado(String estado) {
+    public List<EnderecoDTO> buscarPorEstado(String estado) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new EnderecoDAO(em).buscarPorEstado(estado);
+            return new EnderecoDAO(em).buscarPorEstado(estado)
+                    .stream()
+                    .map(EnderecoDTO::new)
+                    .toList();
         } finally {
             em.close();
         }

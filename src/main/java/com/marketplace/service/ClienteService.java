@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.dao.ClienteDAO;
+import com.marketplace.dto.ClienteDTO;
 import com.marketplace.model.Cliente;
 import com.marketplace.util.JPAUtil;
 
@@ -38,10 +39,13 @@ public class ClienteService {
         }
     }
 
-    public Cliente buscarPerfilCliente(Long id) {
+    public ClienteDTO buscarPerfilCliente(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new ClienteDAO(em).buscarPorIdComEnderecos(id);
+            Cliente cliente = new ClienteDAO(em).buscarPorIdComEnderecos(id);
+            if (cliente == null) return null;
+
+            return new ClienteDTO(cliente);
         } finally {
             em.close();
         }
@@ -78,21 +82,17 @@ public class ClienteService {
         }
     }
 
-    public Cliente autenticar(String email, String senha) {
+    public ClienteDTO autenticar(String email, String senha) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             ClienteDAO dao = new ClienteDAO(em);
             Cliente cliente = dao.buscarPorEmail(email);
 
-            if (cliente == null) {
-                throw new IllegalArgumentException("E-mail não encontrado.");
+            if (cliente == null || !cliente.getSenha().equals(senha)) {
+                throw new IllegalArgumentException("Usuário ou senha inválidos.");
             }
 
-            if (!cliente.getSenha().equals(senha)) {
-                throw new IllegalArgumentException("Senha incorreta.");
-            }
-
-            return cliente;
+            return new ClienteDTO(cliente);
         } finally {
             em.close();
         }

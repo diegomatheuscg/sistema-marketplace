@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.dao.ProdutoDAO;
+import com.marketplace.dto.ProdutoDTO;
 import com.marketplace.model.Produto;
 import com.marketplace.util.JPAUtil;
 
@@ -64,28 +65,38 @@ public class ProdutoService {
         }
     }
 
-    public List<Produto> listarTodos() {
+    public List<ProdutoDTO> listarTodos() {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new ProdutoDAO(em).findAll();
+            List<Produto> produtos = new ProdutoDAO(em).findAll();
+
+            return produtos.stream()
+                    .map(ProdutoDTO::new)
+                    .toList();
         } finally {
             em.close();
         }
     }
 
-    public List<Produto> buscarPorTermo(String termo) {
+    public List<ProdutoDTO> buscarPorTermo(String termo) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new ProdutoDAO(em).buscarPorTermo(termo);
+            return new ProdutoDAO(em).buscarPorTermo(termo)
+                    .stream()
+                    .map(ProdutoDTO::new)
+                    .toList();
         } finally {
             em.close();
         }
     }
 
-    public Produto buscarDetalhesProduto(Long id) {
+    public ProdutoDTO buscarDetalhesProduto(Long id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return new ProdutoDAO(em).buscarPorIdComDetalhes(id);
+            Produto produto = new ProdutoDAO(em).buscarPorIdComDetalhes(id);
+            if (produto == null) return null;
+
+            return new ProdutoDTO(produto);
         } finally {
             em.close();
         }
