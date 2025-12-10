@@ -62,4 +62,12 @@ public class Categoria {
         this.produtos = produtos;
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("Categoria: ").append(nome).append("\n")
+                .append("Descrição: ").append(descricao)
+                .toString();
+    }
+
 }

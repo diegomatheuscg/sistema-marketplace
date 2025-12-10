@@ -78,4 +78,13 @@ public class ItemPedido {
     public void setPrecoUnitario(BigDecimal precoUnitario) {
         this.precoUnitario = precoUnitario;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append(produto != null ? produto.getNome() : "Produto N/A")
+                .append(" | Qtd: ").append(quantidade)
+                .append(" | Unit: R$ ").append(precoUnitario)
+                .toString();
+    }
 }

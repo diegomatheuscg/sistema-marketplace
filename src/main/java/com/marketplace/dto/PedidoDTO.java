@@ -15,6 +15,7 @@ public record PedidoDTO(
         BigDecimal valorTotal,
         StatusPedido status,
         String nomeCliente,
+        String emailCliente,
         EnderecoDTO enderecoEntrega,
         List<ItemPedidoDTO> itens
 ) {
@@ -26,6 +27,7 @@ public record PedidoDTO(
                 pedido.getValorTotal(),
                 pedido.getStatus(),
                 pedido.getCliente() != null ? pedido.getCliente().getNome() : "Cliente não informado",
+                pedido.getCliente() != null ? pedido.getCliente().getEmail() : "",
                 pedido.getEnderecoEntrega() != null ? new EnderecoDTO(pedido.getEnderecoEntrega()) : null,
                 pedido.getItens() != null
                         ? pedido.getItens().stream().map(ItemPedidoDTO::new).toList()

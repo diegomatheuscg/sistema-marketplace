@@ -128,4 +128,14 @@ public class Pedido {
     public static Builder builder() {
         return new Builder();
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("Pedido #").append(codigo).append("\n")
+                .append("Data: ").append(dataPedido).append("\n")
+                .append("Status: ").append(status).append("\n")
+                .append("Total: R$ ").append(valorTotal)
+                .toString();
+    }
 }

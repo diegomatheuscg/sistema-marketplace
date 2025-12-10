@@ -90,4 +90,13 @@ public abstract class Usuario {
     public void setDataAtualizacao(LocalDateTime dataAtualizacao) { this.dataAtualizacao = dataAtualizacao; }
     public List<Endereco> getEnderecos() { return enderecos; }
     public void setEnderecos(List<Endereco> enderecos) { this.enderecos = enderecos; }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("ID: ").append(id).append("\n")
+                .append("Nome: ").append(nome).append("\n")
+                .append("E-mail: ").append(email)
+                .toString();
+    }
 }

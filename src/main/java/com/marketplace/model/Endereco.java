@@ -177,12 +177,13 @@ public class Endereco {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(logradouro+"\n")
-                .append(bairro+"\n")
-                .append(cidade+" - "+estado+"\n")
-                .append(cep);
-
-        return sb.toString();
+        return new StringBuilder()
+                .append(logradouro).append(", ").append(numero)
+                .append(complemento != null && !complemento.isEmpty() ? " - " + complemento : "")
+                .append("\n")
+                .append(bairro).append("\n")
+                .append(cidade).append(" - ").append(estado).append("\n")
+                .append("CEP: ").append(cep)
+                .toString();
     }
 }

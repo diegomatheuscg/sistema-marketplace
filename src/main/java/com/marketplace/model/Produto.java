@@ -90,4 +90,13 @@ public class Produto {
     public void setCategoria(Categoria categoria) { this.categoria = categoria; }
     public List<Avaliacao> getAvaliacoes() { return avaliacoes; }
     public void setAvaliacoes(List<Avaliacao> avaliacoes) { this.avaliacoes = avaliacoes; }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("[SKU: ").append(sku).append("] ").append(nome).append("\n")
+                .append("Preço: R$ ").append(preco).append("\n")
+                .append("Estoque: ").append(estoque).append(" un.")
+                .toString();
+    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "cliente")
 public class Cliente extends Usuario {
 
-    @Column(nullable = false, length = 14, unique = true)
+    @Column(nullable = false, length = 30, unique = true)
     private String cpf;
 
     @OneToMany(mappedBy = "cliente")
@@ -51,4 +51,12 @@ public class Cliente extends Usuario {
     public void setPedidos(List<Pedido> pedidos) { this.pedidos = pedidos; }
     public List<Avaliacao> getAvaliacoes() { return avaliacoes; }
     public void setAvaliacoes(List<Avaliacao> avaliacoes) { this.avaliacoes = avaliacoes; }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(super.toString())
+                .append("\n")
+                .append("CPF: ").append(cpf)
+                .toString();
+    }
 }

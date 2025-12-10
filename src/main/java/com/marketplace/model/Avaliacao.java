@@ -78,5 +78,11 @@ public class Avaliacao {
         this.cliente = cliente;
     }
 
-
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("Nota: ").append(nota).append("/5\n")
+                .append("Comentário: \"").append(comentario).append("\"")
+                .toString();
+    }
 }
