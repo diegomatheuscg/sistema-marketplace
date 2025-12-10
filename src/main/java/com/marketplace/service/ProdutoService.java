@@ -26,6 +26,53 @@ public class ProdutoService {
         }
     }
 
+    public void atualizarProduto(Produto produto) {
+        EntityManager em = JPAUtil.getEntityManager();
+        ProdutoDAO dao = new ProdutoDAO(em);
+        try {
+            em.getTransaction().begin();
+            dao.update(produto);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void removerProduto(Long id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        ProdutoDAO produtoDAO = new ProdutoDAO(em);
+
+        try {
+            em.getTransaction().begin();
+            Produto produto = produtoDAO.findById(id);
+
+            if (produto == null) {
+                throw new IllegalArgumentException("Nenhum produto com esse ID foi encontrado");
+            }
+            produtoDAO.delete(produto);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao remover o produto" + e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Produto> listarTodos() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return new ProdutoDAO(em).findAll();
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Produto> buscarPorTermo(String termo) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
@@ -50,7 +97,7 @@ public class ProdutoService {
         try {
             em.getTransaction().begin();
             Produto produto = dao.findById(idProduto);
-            if(produto != null) {
+            if (produto != null) {
                 produto.setEstoque(novaQuantidade);
                 dao.update(produto);
             }

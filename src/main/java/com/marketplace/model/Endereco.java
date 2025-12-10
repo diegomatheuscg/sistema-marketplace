@@ -175,6 +175,7 @@ public class Endereco {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(logradouro+"\n")

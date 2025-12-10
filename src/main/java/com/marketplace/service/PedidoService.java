@@ -10,6 +10,8 @@ import com.marketplace.model.StatusPedido;
 import com.marketplace.util.JPAUtil;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class PedidoService {
 
@@ -75,6 +77,71 @@ public class PedidoService {
         }
     }
 
+    public void cancelarPedido(Long idPedido) {
+        EntityManager em = JPAUtil.getEntityManager();
+        PedidoDAO pedidoDAO = new PedidoDAO(em);
+        ProdutoDAO produtoDAO = new ProdutoDAO(em);
+
+        try {
+            em.getTransaction().begin();
+            Pedido pedido = pedidoDAO.buscarPedidoComItens(idPedido);
+
+            if (pedido.getStatus() == StatusPedido.CANCELADO) {
+                throw new IllegalArgumentException("Pedido já está cancelado.");
+            }
+
+            for (ItemPedido item : pedido.getItens()) {
+                Produto produto = item.getProduto();
+                produto.setEstoque(produto.getEstoque() + item.getQuantidade());
+                produtoDAO.update(produto);
+            }
+
+            pedido.setStatus(StatusPedido.CANCELADO);
+            pedidoDAO.update(pedido);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Erro ao cancelar: " + e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    public void atualizarStatus(Long idPedido, StatusPedido novoStatus) {
+        EntityManager em = JPAUtil.getEntityManager();
+        PedidoDAO dao = new PedidoDAO(em);
+
+        try {
+            em.getTransaction().begin();
+            Pedido pedido = dao.findById(idPedido);
+
+            if (pedido == null) throw new IllegalArgumentException("Pedido não encontrado");
+
+            pedido.setStatus(novoStatus);
+
+            if (novoStatus == StatusPedido.ENVIADO) {
+                pedido.setDataEnvio(LocalDateTime.now());
+            }
+
+            dao.update(pedido);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Pedido> listarPedidosDoCliente(Long idCliente) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return new PedidoDAO(em).listarPorCliente(idCliente);
+        } finally {
+            em.close();
+        }
+    }
 
     public Pedido buscarPedidoCompleto(Long id) {
         EntityManager em = JPAUtil.getEntityManager();

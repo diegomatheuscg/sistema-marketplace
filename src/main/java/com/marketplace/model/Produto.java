@@ -20,7 +20,6 @@ public class Produto {
 
     private String descricao;
     private int estoque;
-    private double peso;
 
     @Column(nullable = false)
     private BigDecimal preco;
@@ -42,7 +41,6 @@ public class Produto {
         this.nome = builder.nome;
         this.descricao = builder.descricao;
         this.estoque = builder.estoque;
-        this.peso = builder.peso;
         this.preco = builder.preco;
         this.urlImagem = builder.urlImagem;
         this.categoria = builder.categoria;
@@ -57,7 +55,6 @@ public class Produto {
         private String nome;
         private String descricao;
         private int estoque;
-        private double peso;
         private BigDecimal preco;
         private String urlImagem;
         private Categoria categoria;
@@ -66,7 +63,6 @@ public class Produto {
         public Builder nome(String nome) { this.nome = nome; return this; }
         public Builder descricao(String descricao) { this.descricao = descricao; return this; }
         public Builder estoque(int estoque) { this.estoque = estoque; return this; }
-        public Builder peso(double peso) { this.peso = peso; return this; }
         public Builder preco(BigDecimal preco) { this.preco = preco; return this; }
         public Builder urlImagem(String urlImagem) { this.urlImagem = urlImagem; return this; }
         public Builder categoria(Categoria categoria) { this.categoria = categoria; return this; }
@@ -86,8 +82,6 @@ public class Produto {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public int getEstoque() { return estoque; }
     public void setEstoque(int estoque) { this.estoque = estoque; }
-    public double getPeso() { return peso; }
-    public void setPeso(double peso) { this.peso = peso; }
     public BigDecimal getPreco() { return preco; }
     public void setPreco(BigDecimal preco) { this.preco = preco; }
     public String getUrlImagem() { return urlImagem; }

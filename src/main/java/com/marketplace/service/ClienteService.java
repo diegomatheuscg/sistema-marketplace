@@ -77,4 +77,24 @@ public class ClienteService {
             em.close();
         }
     }
+
+    public Cliente autenticar(String email, String senha) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            ClienteDAO dao = new ClienteDAO(em);
+            Cliente cliente = dao.buscarPorEmail(email);
+
+            if (cliente == null) {
+                throw new IllegalArgumentException("E-mail não encontrado.");
+            }
+
+            if (!cliente.getSenha().equals(senha)) {
+                throw new IllegalArgumentException("Senha incorreta.");
+            }
+
+            return cliente;
+        } finally {
+            em.close();
+        }
+    }
 }

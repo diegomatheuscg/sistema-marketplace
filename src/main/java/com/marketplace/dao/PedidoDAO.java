@@ -13,6 +13,20 @@ public class PedidoDAO extends AbstractDAOImpl<Pedido> implements GenericDAO<Ped
     }
 
 
+    public boolean clienteComprouProduto(Long idCliente, Long idProduto) {
+        String jpql = "SELECT COUNT(p) FROM Pedido p JOIN p.itens i " +
+                "WHERE p.cliente.id = :idCliente " +
+                "AND i.produto.id = :idProduto " +
+                "AND p.status = 'ENTREGUE'";
+
+        Long count = em.createQuery(jpql, Long.class)
+                .setParameter("idCliente", idCliente)
+                .setParameter("idProduto", idProduto)
+                .getSingleResult();
+
+        return count > 0;
+    }
+
     public Pedido buscarPedidoComItens(Long id) {
         String jpql = "SELECT p FROM Pedido p JOIN FETCH p.itens i JOIN FETCH i.produto WHERE p.id = :id";
         try {

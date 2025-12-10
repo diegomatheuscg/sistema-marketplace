@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.dao.AvaliacaoDAO;
+import com.marketplace.dao.PedidoDAO;
 import com.marketplace.model.Avaliacao;
 import com.marketplace.util.JPAUtil;
 
@@ -9,9 +10,12 @@ import java.util.List;
 
 public class AvaliacaoService {
 
+    // No AvaliacaoService.java
+
     public void avaliarProduto(Avaliacao avaliacao) {
         EntityManager em = JPAUtil.getEntityManager();
         AvaliacaoDAO dao = new AvaliacaoDAO(em);
+        PedidoDAO pedidoDAO = new PedidoDAO(em);
 
         try {
             em.getTransaction().begin();
@@ -24,8 +28,14 @@ public class AvaliacaoService {
                     avaliacao.getCliente().getId(),
                     avaliacao.getProduto().getId()
             );
+            boolean comprou = pedidoDAO.clienteComprouProduto(
+                    avaliacao.getCliente().getId(),
+                    avaliacao.getProduto().getId()
+            );
 
-            if (jaAvaliou) {
+            if (!comprou) {
+                throw new IllegalArgumentException("Você só pode avaliar produtos que comprou e recebeu.");
+            } else if (jaAvaliou) {
                 throw new IllegalArgumentException("Você já avaliou este produto anteriormente.");
             }
 
